@@ -22,11 +22,8 @@ import os
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = env("SECRET_KEY")
-SECRET_KEY='django-insecure---rj+50=j7t6ne%f3evqi&kmqt$napv3u%831hw6u+j$$)51n^'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ['*','manataltest.herokuapp.com']
 
@@ -94,12 +91,9 @@ DATABASES = {
         'PASSWORD': env('DATABASE_PASS'),
         'HOST': '127.0.0.1', 
         'PORT':'5432'
-        # 'HOST': str(env('DATABASE_HOST','127.0.0.1')), 
-        # 'PORT': str(env('DATABASE_PORT'))
     }
 }
-# DATABASE_HOST=127.0.0.1
-# DATABASE_PORT=5432
+
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
