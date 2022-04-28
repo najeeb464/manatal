@@ -11,21 +11,21 @@ from django.core.validators import MinValueValidator
 # Create your models here.
 
 class GenericModelMixin(models.Model):
-    created_at                          = models.DateTimeField(auto_now_add=True)
-    updated_at                          = models.DateTimeField(auto_now=True)
+    created_at                          =models.DateTimeField(auto_now_add=True)
+    updated_at                          =models.DateTimeField(auto_now=True)
     country                             =models.CharField(max_length=120,null=True,blank=True)
     city                                =models.CharField(max_length=120,null=True,blank=True)
     state                               =models.CharField(max_length=120,null=True,blank=True)
     zip_code                            =models.CharField(max_length=120,null=True,blank=True)
     address                             =models.CharField(max_length=120,null=True,blank=True)
-    phone                               = models.CharField(max_length=100,null=True,blank=True)
+    phone                               =models.CharField(max_length=100,null=True,blank=True)
     fax                                 =models.CharField(max_length=120,null=True,blank=True)
     class Meta:
         abstract = True
 
 class School(GenericModelMixin):
-    name            =models.CharField(max_length=120)
-    max_student_limit  =models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    name                =models.CharField(max_length=120)
+    max_student_limit   =models.PositiveIntegerField(validators=[MinValueValidator(1)])
     
     class Meta:
         verbose_name ="School"
@@ -40,13 +40,13 @@ class Student(GenericModelMixin):
     OTHER="O"
     GENDER_CHOICE=((MALE,"MALE"),(FEMALE,"FEMALE"),(OTHER,"OTHER"))
     
-    first_name      =models.CharField(max_length=120)
-    last_name       =models.CharField(max_length=120)
-    auto_gen_identification  =models.BooleanField(default=True)
-    identification  =models.CharField(max_length=20,blank=True)
-    school          =models.ForeignKey(School,on_delete=models.CASCADE)
-    dob             =models.DateField(null=True,blank=False)
-    gender          =models.CharField(max_length=10,choices=GENDER_CHOICE,null=True,blank=False)
+    first_name              =models.CharField(max_length=120)
+    last_name               =models.CharField(max_length=120)
+    auto_gen_identification =models.BooleanField(default=True)
+    identification          =models.CharField(max_length=20,blank=True)
+    school                  =models.ForeignKey(School,on_delete=models.CASCADE)
+    dob                     =models.DateField(null=True,blank=False)
+    gender                  =models.CharField(max_length=10,choices=GENDER_CHOICE,null=True,blank=False)
     
     class Meta:
         verbose_name ="Student"
@@ -54,7 +54,7 @@ class Student(GenericModelMixin):
         
     def __str__(self):
         return self.first_name+' '+self.last_name
-    
+    @property
     def display_gender(self):
         if self.gender:
             return dict(Student.GENDER_CHOICE)[self.gender]

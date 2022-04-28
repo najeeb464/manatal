@@ -1,6 +1,6 @@
 from student.api.serializers import SchoolSerializer, StudentSerializer
 from rest_framework import viewsets,permissions
-from student.filters import SchoolFilter
+from student.filters import SchoolFilter,StudentFilter
 from student.models import Student,School
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -27,9 +27,18 @@ class SchoolViewSet(viewsets.ModelViewSet):
 class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     permission_classes = (permissions.AllowAny,)
+    filterset_class=StudentFilter
     def get_queryset(self):
         qs=Student.objects.filter(school__id=self.kwargs['school_pk']).order_by('-id')
         return Student.objects.filter(school__id=self.kwargs['school_pk']).order_by('-id')
+    
+    def get_permissions(self):
+        public_methods=['list','retrieve']
+        if self.action in public_methods:
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
     
     
     @action(detail=False, methods=['GET'],name='choices')

@@ -27,6 +27,9 @@ class SchoolSerializer(serializers.ModelSerializer):
             self.Meta.depth = 0
         else:
             self.Meta.depth = 1
+            if hasattr(instance,"pk"):
+                self.Meta.depth = 1
+            
         
     def validate(self, attrs):
         attrs=super().validate(attrs)
@@ -42,14 +45,16 @@ class SchoolSerializer(serializers.ModelSerializer):
         
         
 class StudentSerializer(serializers.ModelSerializer):
+    gender_name=serializers.CharField(source='display_gender',read_only=True)
 
     class Meta:
         model = Student
-        fields = ['id', 'first_name', 'last_name','dob','gender','auto_gen_identification','identification','school','country',"city","state","zip_code","address","phone","fax"]
+        fields = ['id', 'first_name', 'last_name','dob','gender','gender_name','auto_gen_identification','identification','school','country',"city","state","zip_code","address","phone","fax"]
         extra_kwargs = {
                         'first_name': {'required': True},
-                        'last_name': {'required': True},
-                        'gender': {'required': True},
+                        'last_name' : {'required': True},
+                        'gender'    : {'required': True},
+                        'dob'       : {'required': True},
                         } 
     def __init__(self, instance=None, *args, **kwargs):
         super().__init__(instance=instance,*args, **kwargs)
@@ -63,12 +68,14 @@ class StudentSerializer(serializers.ModelSerializer):
             self.Meta.depth = 0
         else:
             self.Meta.depth = 1
+            if hasattr(instance,"pk"):
+                self.Meta.depth = 1
     
     def validate(self, attrs):
         attrs=super().validate(attrs)
-        school_id = self.context['request'].parser_context['kwargs']['school_pk']
-        auto_flag       =attrs.get("auto_gen_identification",False)
-        identification       =attrs.get("identification",None)
+        school_id           =self.context['request'].parser_context['kwargs']['school_pk']
+        auto_flag           =attrs.get("auto_gen_identification",False)
+        identification      =attrs.get("identification",None)
         if school_id:
             try:
                 schoolobj=School.objects.get(id=school_id)
