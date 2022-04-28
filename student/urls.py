@@ -3,11 +3,11 @@ from student.api.views import *
 from django.urls import path,include
 
 router = routers.SimpleRouter()
-router.register(r'school',SchoolViewSet)
+router.register(r'schools',SchoolViewSet)
 
 
-school_router = routers.NestedSimpleRouter(router, r'school', lookup='school')
-school_router.register(r'student', StudentViewSet, basename='school-student')
+school_router = routers.NestedSimpleRouter(router, r'schools', lookup='school')
+school_router.register(r'students', StudentViewSet, basename='school-student')
 
 urlpatterns = [
     path(r'', include(router.urls)),

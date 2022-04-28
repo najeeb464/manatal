@@ -28,7 +28,8 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
-        return Student.objects.filter(school=self.kwargs['school_pk']).order_by('-id')
+        qs=Student.objects.filter(school__id=self.kwargs['school_pk']).order_by('-id')
+        return Student.objects.filter(school__id=self.kwargs['school_pk']).order_by('-id')
     
     
     @action(detail=False, methods=['GET'],name='choices')

@@ -7,19 +7,21 @@ class StudentForm(forms.ModelForm):
         fields=["first_name","last_name","auto_gen_identification","identification","dob","gender",
                 "school","country","city","state","zip_code","address","phone","fax"]        
     def clean(self):
-        auto_flag       =self.cleaned_data.get("auto_gen_identification",self.instance.get("auto_gen_identification",False))
-        Identify_no     =self.cleaned_data.get("identification",getattr(self.instance,"identification",None))
-        schoolobj       =self.cleaned_data.get("school",self.instance.get('school',None))
+        auto_flag       =self.cleaned_data.get("auto_gen_identification",False)
+        Identify_no     =self.cleaned_data.get("identification",None)
+        schoolobj       =self.cleaned_data.get("school",None)
         if schoolobj:
-             if schoolobj.student_set.only("id").all().count() > schoolobj.max_student_limit:
-                 raise forms.ValidationError({'identification':'Please Either Provide Identification # or Choose  Auto gen Identification '})
+             if schoolobj.student_set.only("id").all().exclude(id=self.id).count() > schoolobj.max_student_limit:
+                 raise forms.ValidationError({'school':'Student Limit exceed in this school'})
         
         if  auto_flag == False:
             if  Identify_no is None or len(Identify_no) <=0:
                 raise forms.ValidationError({'identification':'Please Either Provide Identification # or Choose  Auto gen Identification '})
             else:
-                studentObj=Student.objects.filter(identification__exact=Identify_no).exists()
-                if studentObj:
+                studentObj=Student.objects.filter(identification__exact=Identify_no)
+                if self.instance and hasattr(self.instance,'pk'):
+                    studentObj=studentObj.exclude(identification__exact=self.instance.identification)
+                if studentObj.exists():
                     raise forms.ValidationError({'identification':'Student Identification must be unique'})
             
         return super().clean()
@@ -30,7 +32,6 @@ class SchoolForm(forms.ModelForm):
         fields=["name","country","city","state","zip_code","address","phone","fax"]
         
     def clean(self):
-        print("self.cleaned_data",self.cleaned_data)
         _name=self.cleaned_data.get("name",None)
         if _name is None or len(_name)<=0:
             raise forms.ValidationError({'name':'School name is required'})
