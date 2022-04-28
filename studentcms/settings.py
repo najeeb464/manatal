@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
+import os
 env = environ.Env()
-environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 import os
 
 # Quick-start development settings - unsuitable for production
@@ -89,8 +91,8 @@ DATABASES = {
         'NAME':env('DATABASE_NAME'), 
         'USER':env('DATABASE_USER'), 
         'PASSWORD': env('DATABASE_PASS'),
-        'HOST': '127.0.0.1', 
-        'PORT':'5432'
+        'HOST': env('DATABASE_HOST'), 
+        'PORT':env('DATABASE_PORT')
     }
 }
 
