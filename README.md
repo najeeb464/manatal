@@ -35,8 +35,9 @@ DATABASE_HOST
 DATABASE_PORT
 ```
 ```sh
-python manage.py migrate
+ python manage.py migrate
  python manage.py initial_data
+ python manage.py collectstatic
  python manage.py runserver
  ```
  when you run initial_data along with school and student dummy data user data also created.use can login in your admin pannel or deployed site admin pannel using bellow mentioned credentials 
@@ -52,7 +53,7 @@ python manage.py migrate
 Local environment:
 ```sh
 GET || POST 
-127.0.0.1:8000/school/
+127.0.0.1:8000/schools/
 ```
 Production environment:
 ```sh
@@ -101,7 +102,7 @@ List and create
 Local environment:
 ```sh
 GET || POST 
-http://127.0.0.1:8000/school/1/student/
+http://127.0.0.1:8000/schools/1/students/
 ```
 Production environment:
 ```sh
@@ -131,12 +132,13 @@ https://manatalcms.herokuapp.com/schools/<school_pk>/students/
 - If auto_gen_identification is not selected then identification fields is required.
 ### Detail Apis
 using this end point you can get detail of particular student ,update and delete student instance
+Local Environment
 ```sh
 Allowed Methods
 GET || PUT || PATCH || DELTE
 127.0.0.1:8000/schools/:school_pk/students/:pk/
 ```
-Production
+Production Environment
 ```sh
 Allowed Methods
 GET || PUT || PATCH || DELTE
