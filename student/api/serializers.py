@@ -46,10 +46,12 @@ class SchoolSerializer(serializers.ModelSerializer):
         
 class StudentSerializer(serializers.ModelSerializer):
     gender_name=serializers.CharField(source='display_gender',read_only=True)
+    school=SchoolSerializer()
 
     class Meta:
         model = Student
         fields = ['id', 'first_name', 'last_name','dob','gender','gender_name','auto_gen_identification','identification','school','country',"city","state","zip_code","address","phone","fax"]
+        depth=0
         extra_kwargs = {
                         'first_name': {'required': True},
                         'last_name' : {'required': True},
@@ -63,13 +65,14 @@ class StudentSerializer(serializers.ModelSerializer):
             self.fields['identification'].read_only = True
             self.fields['auto_gen_identification'].read_only = True
         self.fields['school'].read_only = True
-            
+        #depth not behaving as it should be some  so I use school serializer will fix this later 
         if request and (request.method == 'POST' or request.method == 'PUT' or request.method == 'PATCH'):
-            self.Meta.depth = 0
+            setattr(self.Meta, 'depth', 0)
         else:
-            self.Meta.depth = 1
+            setattr(self.Meta, 'depth', 1)
             if hasattr(instance,"pk"):
-                self.Meta.depth = 1
+                print("instance has pk")
+                setattr(self.Meta, 'depth', 1)
     
     def validate(self, attrs):
         attrs=super().validate(attrs)
@@ -90,7 +93,6 @@ class StudentSerializer(serializers.ModelSerializer):
             if not auto_flag and (identification is None or len(identification)==0):
                 raise serializers.ValidationError({"school":"Please Either Provide Identification # or Choose  Auto gen Identification"})
                 
-        
         if schoolobj:
             attrs['school']=schoolobj
         return attrs
