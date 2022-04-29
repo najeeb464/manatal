@@ -49,7 +49,6 @@ DATABASE_PORT
 ### School
 ##### List and Create
 ##
-### Api
 Local environment:
 ```sh
 GET || POST 
@@ -72,6 +71,8 @@ https://manatalcms.herokuapp.com/schools/
 | address | string |&check;||&check;|
 | phone | string |&check;||&check;|
 | fax | string |&check;||&check;|
+
+##### Detail,Update,Delete
 ```sh
 Allowed Methods
 GET || PUT || PATCH || DELTE
