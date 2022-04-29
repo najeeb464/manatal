@@ -6,7 +6,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 
-
+class GenderChoicesView(viewsets.ViewSet):
+    pagination_class =None
+    permission_classes = (permissions.AllowAny,)
+    def list(self, request):
+        return Response([{"key":i[0],"value":i[1]}for i in Student.GENDER_CHOICE])
 
 class SchoolViewSet(viewsets.ModelViewSet):
     serializer_class = SchoolSerializer
@@ -43,5 +47,5 @@ class StudentViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['GET'],name='choices')
     def gander_choices(self,*args,**kwargs):
-        return Response([{"key":i[0],"value":i[1]}for i in Student.GANDER_CHOICE])
+        return Response([{"key":i[0],"value":i[1]}for i in Student.GENDER_CHOICE])
     

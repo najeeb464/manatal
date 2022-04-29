@@ -10,6 +10,7 @@ school_router = routers.NestedSimpleRouter(router, r'schools', lookup='school')
 school_router.register(r'students', StudentViewSet, basename='school-student')
 
 urlpatterns = [
-    path(r'', include(router.urls)),
-    path(r'', include(school_router.urls)),
+    path('gender/choices/', GenderChoicesView.as_view({'get': 'list'}),name="gender-choices"),
+    path(r''              , include(router.urls)),
+    path(r''              , include(school_router.urls)),
 ]
