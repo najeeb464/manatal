@@ -18,10 +18,11 @@ Install the dependencies and devDependencies and start the server.
 ```sh
  pip install --user pipenv
  pipenv shell
- clone git repo
- pipenv run pip install -r requirements.txt
  git clone https://github.com/najeeb464/manatal.git
  cd  studentcms
+ git checkout master
+ pipenv run pip install -r requirements.txt
+ 
 ```
 create .env file in the root directory (where manage.py file is present) and assign value to the variable listed below
 ```sh
