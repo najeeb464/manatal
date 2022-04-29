@@ -30,9 +30,9 @@ except:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = env("DEBUG")
-
+DEBUG=os.environ['DEBUG'] == 'True'
 ALLOWED_HOSTS = ['*','manataltest.herokuapp.com']
+
 
 
 # Application definition
@@ -150,4 +150,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-django_heroku.settings(locals())
+if DEBUG ==True:
+    django_heroku.settings(locals())
